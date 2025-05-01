@@ -13,6 +13,19 @@ import calendar
 import pandas as pd
 import matplotlib.pyplot as plt
 
+============================
+Folder Tree should be
+_COP1047c
+  .idea
+  pythonProject
+    .idea
+    .venv
+    BankingApp
+      __pycache__
+      data (folder get created on initial load of the program if it does not exists)
+      *.py (all programs)
+      
+    
 =============================
 CLI  Banking Application Main Features
 Below are the main features of the my CLI banking application
