@@ -85,7 +85,7 @@ if __name__ == "__main__":
                     user_id = input(f"Enter an user id at least 8 characters long:  ")
                     assert len(user_id) >= 8, f"{Fore.RED}Your user ID must be at least 8 characters long {Style.RESET_ALL}"
 
-                    user_password = input("Enter a password at least 8 chars ").strip().lower()
+                    user_password = input("Enter a password at least 8 chars ")
                     assert len(user_password) >= 8, f"{Fore.RED}Your user ID must be at least 8 characters long{Style.RESET_ALL}"
                     assert user_id != user_password,f"{Fore.RED}Your password CANNOT be the same as your user_id{Style.RESET_ALL}"
 
@@ -213,4 +213,3 @@ if __name__ == "__main__":
 
         # display the main menu and user make a choice
         show_main_menu()
-

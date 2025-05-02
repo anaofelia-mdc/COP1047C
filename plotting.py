@@ -4,6 +4,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+import numpy as np
 
 def output_report(user_id, trans_data):
     # Convert transaction data to a Pandas DataFrame
@@ -34,12 +35,23 @@ def output_report(user_id, trans_data):
         # Plot transactions with unique colors per transaction type
         plt.figure(figsize=(10, 6))
         bars = []
-        for trans_type in transaction_types:
-            # Filter data by transaction type
+        x_labels = filter_trans_data["trans_date"].unique()  # Get unique dates for x-axis
+        x_positions = np.arange(len(x_labels))  # Numeric positions for dates
+
+        bar_width = 0.3 #separate bars
+
+        for i, trans_type in enumerate(transaction_types):
             type_data = filter_trans_data[filter_trans_data["trans_type"] == trans_type]
-            # Plot each type separately with its color
-            bar = plt.bar(type_data["trans_date"], type_data["trans_amount"], color=color_map[trans_type], label=trans_type)
+
+            # Map trans dates to  x-axis
+            x_value = [x_positions[np.where(x_labels == date)[0][0]] for date in type_data["trans_date"]]
+
+            # Offset bars horizontally for each transaction type
+            bar = plt.bar(np.array(x_value) + (i * bar_width), type_data["trans_amount"],color=color_map[trans_type], width=bar_width, label=trans_type)
             bars.append(bar)
+
+        # put x-axis labels to dates
+        plt.xticks(x_positions + (bar_width * (len(transaction_types) / 2)), x_labels, rotation=45)
 
         # Add axis labels and title
         plt.xlabel("Transaction Date")
@@ -48,7 +60,6 @@ def output_report(user_id, trans_data):
         plt.legend(title="Transaction Type")  # Add a legend for the colors
         plt.xticks(rotation=45)  # Rotate x-axis labels for readability
         plt.tight_layout()
-        plt.show()
 
         # Save filtered transactions to CSV
         subfolder = "data"
@@ -57,7 +68,13 @@ def output_report(user_id, trans_data):
 
         save_file = os.path.join(subfolder, f"{user_id}_trans_report.csv")
         try:
+            save_plot = os.path.join(subfolder,f"{user_id}_transactions_chart.png")  # File name
+            plt.savefig(save_plot, dpi=300, bbox_inches="tight")  # Saves high res
+            print(f"Chart saved to {save_plot}")
+
             filter_trans_data.to_csv(save_file, index=False)
             print(f"Report saved to {save_file}")
         except Exception as e:
             print(f"An error occurred while saving the report: {e}")
+        plt.show()  #must be done after saving, otherwise it will clear picture before saving it
+    return

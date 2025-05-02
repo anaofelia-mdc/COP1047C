@@ -1,7 +1,6 @@
 #This module handles the management of bank accounts: checking, deposit, withdrawals, interest accrual
 import winsound #use this library to make beep sound for the user
 from datetime import datetime
-import calendar
 
 import config
 from BankingApp.storage import update_bank_account
